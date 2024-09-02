@@ -1,0 +1,23 @@
+---
+services:
+  flamenco-manager:
+    image: flamenco-manager
+    container_name: flamenco-manager
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Indianapolis
+    ports:
+      - 127.0.0.1:8080:80
+    volumes:
+      - ./volumes/config:/config
+      - ./volumes/data:/data
+      - nfs-flamenco:/srv/flamenco
+    restart: unless-stopped
+
+volumes:
+  nfs-flamenco:
+    driver_opts:
+      type: nfs
+      o: addr=maxocull.com,nfsvers=3
+      device: :/srv/flamenco
