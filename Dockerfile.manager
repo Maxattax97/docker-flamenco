@@ -1,0 +1,43 @@
+FROM debian:bookworm-slim
+
+ARG FLAMENCO_VERSION=3.5
+
+# Curl basically never changes
+# hadolint ignore=DL3008
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+RUN mkdir -p /app /config /data \
+    && curl "https://flamenco.blender.org/downloads/flamenco-${FLAMENCO_VERSION}-linux-amd64.tar.gz" \
+        -o /app/flamenco.tar.gz
+
+RUN tar -xf flamenco.tar.gz --strip-components=1 \
+    && rm -f \
+        /app/*.md \
+        /app/LICENSE \
+        /app/flamenco-worker \
+        /app/flamenco.tar.gz \
+    && ln -s /config/flamenco-manager.yaml /app/flamenco-manager.yaml
+
+# NOTE: Clean up unnecessary packages to reduce image size.
+# && apt-get remove -y \
+# curl \
+# ca-certificates \
+# && apt-get autoremove -y \
+# && apt-get clean
+
+# TODO: Use system FFmpeg instead of bundled one to gain GPU acceleration.
+# && apt-get install -y --no-install-recommends ffmpeg \
+# && rm -f tools/ffmpeg-linux-amd64 \
+# && ln -s "$(which ffmpeg)" /app/tools/ffmpeg-linux-amd64
+
+CMD [ "/app/flamenco-manager" ]
+EXPOSE 80
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:80/ || exit 1

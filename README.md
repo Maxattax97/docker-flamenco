@@ -2,11 +2,18 @@
 
 # Features
 
-- [ ] NFS mount support
-- [ ] Configurable port
-- [ ] Doesn't try to open a browser
-- [ ] Shaman automatically enabled
-- [ ] Weekly CI builds
+- [x] NFS mount support
+  - just use docker volumes
+- [ ] configurable port
+- [ ] doesn't try to open a browser
+- [ ] shaman automatically enabled
+- [ ] weekly CI builds
 - [ ] tag version as version of flamenco
-- [ ] optionally build in a blender version (as specified)
-- [ ] worker node under separate tag
+- [x] optionally build in a blender version (as specified)
+  - [x] GPU support
+  - [ ] GPU docker passthrough docs
+- [x] worker image under separate tag
+
+# Links
+
+- https://projects.blender.org/studio/flamenco
