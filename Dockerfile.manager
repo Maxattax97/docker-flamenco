@@ -13,10 +13,19 @@ RUN apt-get update \
 
 WORKDIR /app
 
+# I want to keep these stages separate so I don't have to re-download both.
+# hadolint ignore=DL3059
 RUN mkdir -p /app /config /data \
     && curl "https://flamenco.blender.org/downloads/flamenco-${FLAMENCO_VERSION}-linux-amd64.tar.gz" \
         -o /app/flamenco.tar.gz
 
+# Download experimental OptiX script for render pipeline
+# hadolint ignore=DL3059
+RUN mkdir -p /app/scripts \
+    && curl "https://flamenco.blender.org/third-party-jobs/cycles-optix-gpu/cycles_optix_gpu.js" \
+        -o /app/scripts/cycles_optix_gpu.js
+
+# hadolint ignore=DL3059
 RUN tar -xf flamenco.tar.gz --strip-components=1 \
     && rm -f \
         /app/*.md \
@@ -24,11 +33,6 @@ RUN tar -xf flamenco.tar.gz --strip-components=1 \
         /app/flamenco-worker \
         /app/flamenco.tar.gz \
     && ln -s /config/flamenco-manager.yaml /app/flamenco-manager.yaml
-
-# Download experimental OptiX script for render pipeline
-RUN mkdir -p /app/scripts \
-    && curl "https://flamenco.blender.org/third-party-jobs/cycles-optix-gpu/cycles_optix_gpu.js" \
-        -o /app/scripts/cycles_optix_gpu.js
 
 # NOTE: Clean up unnecessary packages to reduce image size.
 # && apt-get remove -y \
