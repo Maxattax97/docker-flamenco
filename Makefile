@@ -7,7 +7,7 @@ build:
 run: build
 	docker-compose rm -sf
 	docker volume rm docker-flamenco_nfs-flamenco
-	docker-compose up
+	docker-compose up -d flamenco-manager
 
 explore-manager:
 	docker run --rm -it flamenco-manager /bin/bash
