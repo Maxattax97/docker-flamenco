@@ -1,10 +1,11 @@
-# docker-flamenco-manager
+# docker-flamenco
 
 # Features
 
 - [x] NFS mount support
   - just use docker volumes
 - [ ] configurable port
+- [ ] configurable mount points
 - [ ] doesn't try to open a browser
 - [ ] shaman automatically enabled
 - [ ] weekly CI builds
