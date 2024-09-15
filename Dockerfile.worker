@@ -1,6 +1,6 @@
 FROM debian:bookworm-slim
 
-ARG FLAMENCO_VERSION=3.5
+ARG FLAMENCO_VERSION=3.6-alpha3
 ARG BLENDER_MAJOR=4
 ARG BLENDER_MINOR=2
 ARG BLENDER_PATCH=1
@@ -26,9 +26,12 @@ WORKDIR /app
 
 RUN mkdir -p /app /usr/local/bin /config /data
 
+# I want to keep these stages separate so I don't have to re-download both.
+# hadolint ignore=DL3059
 RUN curl "https://download.blender.org/release/Blender${BLENDER_MAJOR}.${BLENDER_MINOR}/blender-${BLENDER_MAJOR}.${BLENDER_MINOR}.${BLENDER_PATCH}-linux-x64.tar.xz" \
         -o /app/blender.tar.xz
 
+# hadolint ignore=DL3059
 RUN curl "https://flamenco.blender.org/downloads/flamenco-${FLAMENCO_VERSION}-linux-amd64.tar.gz" \
         -o /app/flamenco.tar.gz
 
